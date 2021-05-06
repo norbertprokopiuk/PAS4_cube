@@ -70,6 +70,7 @@ int16_t rot_e = 0;
 int16_t ang_e = 0;
 int16_t x_e;
 int16_t y_e;
+int16_t dp1, dp2;
 int16_t v_e;
 uint16_t milsec = 0;
 double velocity = 0;
@@ -185,14 +186,18 @@ int main(void)
 			pulse_count_1 = TIM1->CNT;
 			pulse_count_2 = TIM2->CNT;
 			napiecie1 = HAL_ADC_GetValue(&hadc1);
-			if (napiecie1 <= 280)
+			if (napiecie1 <= 310)
 				TIM3->CCR2 = 999;
 			else
 				TIM3->CCR2 = 0;
 
 			if ((pulse_count_1 != last_state_1 || pulse_count_2 != last_state_2)) {
-				Dl = (3.1415 * pulse_count_1) * d_kola / 1200;
-				Dp = (3.1415 * pulse_count_2) * d_kola / 1200;
+
+				dp1 = (pulse_count_1 - last_state_1)%100;
+				dp2 = (pulse_count_2 - last_state_2)%100;
+
+				Dl = Dl+ (3.1415 * dp1) * d_kola/ 1200;
+				Dp = Dp+ (3.1415 * dp2) * d_kola/ 1200;
 
 				D = (Dl + Dp) / 2;
 				rot = (Dp - Dl) / rozstaw;
@@ -463,7 +468,7 @@ static void MX_TIM1_Init(void)
   htim1.Instance = TIM1;
   htim1.Init.Prescaler = 0;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 65535;
+  htim1.Init.Period = 1201;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -513,7 +518,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 0;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 65535;
+  htim2.Init.Period = 1201;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
