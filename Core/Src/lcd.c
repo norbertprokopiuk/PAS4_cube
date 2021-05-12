@@ -9,9 +9,9 @@
 #include "lcd.h"
 #include "font.h"
 
-#define PCD8544_FUNCTION_SET		0x20
+#define PCD8544_FUNCTION_SET		0x20 //str 14 dokumentacji
 #define PCD8544_DISP_CONTROL		0x08
-#define PCD8544_DISP_NORMAL			0x0c
+#define PCD8544_DISP_NORMAL			0x0c //ustawienie trybu normalnego 1000 | 0100
 #define PCD8544_SET_Y				0x40
 #define PCD8544_SET_X				0x80
 #define PCD8544_H_TC				0x04
@@ -36,21 +36,16 @@ void lcd_setup(void)
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, GPIO_PIN_SET);
 
-	lcd_cmd(PCD8544_FUNCTION_SET | 1);
-	lcd_cmd(PCD8544_H_BIAS | 4);
-	lcd_cmd(PCD8544_H_VOP | 0x3f);
-	lcd_cmd(PCD8544_FUNCTION_SET);
-	lcd_cmd(PCD8544_DISP_NORMAL);
+	lcd_cmd(PCD8544_FUNCTION_SET | 1);//wlaczone funkcje rozszerzone
+	lcd_cmd(PCD8544_H_BIAS | 3);//wartosc optymalna
+	lcd_cmd(PCD8544_H_VOP | 0x3f); //ustawienie kontrastu ustawione eksperymentalnie
+	lcd_cmd(PCD8544_FUNCTION_SET);//zmiana na funkcje standardowe
+	lcd_cmd(PCD8544_DISP_NORMAL);//ustawienie wyświetlania w trybie normal
 }
 
 void lcd_clear(void)
 {
 	memset(lcd_buffer, 0, LCD_BUFFER_SIZE);
-}
-
-void lcd_draw_bitmap(const uint8_t* data)
-{
-	memcpy(lcd_buffer, data, LCD_BUFFER_SIZE);
 }
 
 void lcd_draw_text(int row, int col, const char* text)

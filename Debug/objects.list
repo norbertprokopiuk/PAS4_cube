@@ -1,4 +1,3 @@
-"Core/Src/bitmap.o"
 "Core/Src/font.o"
 "Core/Src/lcd.o"
 "Core/Src/main.o"

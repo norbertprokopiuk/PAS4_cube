@@ -22,7 +22,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "bitmap.h"
 #include <stdint.h>
 #include "stm32f1xx.h"
 #include "lcd.h"
@@ -37,7 +36,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define ACC_ADDRESS 0x3a // binarnie 00111010 odczytane z dokumentacji
+#define ACC_ADDRESS 0x3a // binarnie 00111010 odczytane z dokumentacji tabela 16
 #define ACC_CTRL1 0x20
 #define ACC_X				0x28
 #define ACC_Y				0x2a
@@ -225,7 +224,7 @@ int main(void) {
 
 	HAL_ADC_Start(&hadc1);
 
-	if (I2C_odczyt_rejestru(0xf) == 0x49)
+	if (I2C_odczyt_rejestru(0xf) == 0x49) //sprawdzanie czy nucleo wykryło akcelerometr
 		is_acc_ready = 1;
 	else
 		is_acc_ready = -1;
